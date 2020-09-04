@@ -9,22 +9,13 @@ namespace BattleShips
            static GameController gameController = new GameController();
         static void Main(string[] args)
         {
-            // GameArea gameArea = new GameArea();
-            //Creating a bautifull banner from an ASCii file.
-            string[] banner = System.IO.File.ReadAllLines("../../../Graphic/ASCii");
-            foreach (string item in banner)
-            {
-                Console.WriteLine(item);
-
-            }
-            Thread.Sleep(1);
-            Console.Clear();
+           
 
 
             //Creating gameareas
             GameArea playerArea = gameController.CreateGameArea(10, 10, 0);
             GameArea computerArea = gameController.CreateGameArea(10, 10, 0);
-            string[] rowLetters = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+            string[] rowLetters = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
             List<Ship> ships = new List<Ship>();
             ships.Add(new Ship("Carrier", 5, true));
@@ -56,20 +47,42 @@ namespace BattleShips
 
 
 
-            //Sending the arguments to the methods by including them in the brackets. They can only be read this way
+
+            ShowBanner(); //Creating a bautifull banner from an ASCii file.
+            
+            //Sending the arguments to the methods by including those in the brackets. They can only be read this way
             gameController.FillGameArea(computerArea, playerArea);
             ShowGameArea(computerArea, playerArea, rowLetters);
             ShowChooseShip(playerShips);
             Ship choosenShip = gameController.ChoosePlayerShip(playerShips);
-            ShowChooseDirection(choosenShip);
+            ChooseDirection(choosenShip);
+            //ShowPlaceYourShip();
+
+            ShowPlaceXCordinate();
+            gameController.PlaceX();
+            ShowPlaceYCordinate();
+            gameController.PlaceY();
+
+            gameController.PlacePlayerShip(playerArea, choosenShip);
             
 
+        }
 
-            //ShowChooseDirection(ships);
-            // gameController.ChooseDirection(ships);
 
-            //ShowPlaceYourShips(ships);
 
+
+        /// <summary>
+        /// Creating a bautifull banner from an ASCii file.
+        /// </summary>
+        public static void ShowBanner()
+        {
+            string[] banner = System.IO.File.ReadAllLines("../../../Graphic/ASCii");
+            foreach (string item in banner)
+            {
+                Console.WriteLine(item);
+            }
+            Thread.Sleep(1);
+            Console.Clear();
         }
 
 
@@ -89,10 +102,11 @@ namespace BattleShips
 
 
 
+
         /// <summary>
         /// Shows the menu for choosing the direction of the ship
         /// </summary>
-        public static void ShowChooseDirection(Ship playerShip)//refering to the choosen ship
+        public static void ChooseDirection(Ship playerShip)//refering to the choosen ship but can be called whatever you like
         {
             Console.WriteLine("Choose direction");
             Console.WriteLine($"Horisontal: Press 1: Vertical: Press 2");
@@ -115,7 +129,25 @@ namespace BattleShips
         public static void ShowPlaceYourShip()
         {
             Console.WriteLine("Choose the cordinate to place you ship");
+            Console.WriteLine("You can only place it if it stays withing the game area");
         }
+
+
+
+
+        public static void ShowPlaceXCordinate()
+        {
+            Console.WriteLine("Choose the X cordinate");
+        }
+
+
+
+
+         public static void ShowPlaceYCordinate()
+        {
+            Console.WriteLine("Choose the Y cordinate");
+        }
+
 
 
 
@@ -130,7 +162,7 @@ namespace BattleShips
             Console.WriteLine("   |=========================================|========================================|");
             Console.WriteLine("   |            Computer game area           |            Player game area            |");
             Console.WriteLine("   |=========================================|========================================|");
-            Console.WriteLine("   |        1  2  3  4  5  6  7  8  9  10    |        1  2  3  4  5  6  7  8  9  10   |");
+            Console.WriteLine("   |        A  B  C  D  E  F  G  H  I  J     |        A  B  C  D  E  F  G  H  I  J    |");
             Console.WriteLine();
             for (int i = 0; i < computerArea.GameAreaArray.GetLength(0); i++)
             {
