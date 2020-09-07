@@ -11,6 +11,9 @@ namespace BattleShips
         //private byte height;
         //private byte width;
         // private bool run;
+
+
+
         #endregion
 
         #region Properties
@@ -62,9 +65,9 @@ namespace BattleShips
 
 
 
-        public Ship CreateShip(string name, byte length, bool direction)
+        public Ship CreateShip(string name, byte length, byte hit, bool direction)
         {
-            Ship ship = new Ship(name, length, direction);
+            Ship ship = new Ship(name, length, hit, direction);
             return ship;
         }
 
@@ -76,7 +79,7 @@ namespace BattleShips
         /// </summary>
         /// <param name="playerShips"></param>
         /// <returns></returns>
-        public Ship ChoosePlayerShip(List<Ship> playerShips)
+        public Ship ChoosePlayerShipOld(List<Ship> ships, List<Ship> playerShips)
         {
             Ship chosenShip = null;
             switch (Console.ReadKey(true).KeyChar)
@@ -112,6 +115,43 @@ namespace BattleShips
 
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ships"></param>
+        /// <param name="playerShips"></param>
+        /// <returns></returns>
+        public Ship ChoosePlayerShip(List<Ship> ships, List<Ship> playerShips)//added ships for an experiment
+        {
+            try
+            {
+
+                byte pick = Convert.ToByte(Console.ReadKey(true).KeyChar);
+                Ship chosenShip = null;
+                for (byte i = 0; i < ships.Count; i++)
+                {
+                    if (pick == i)
+                    {
+                        chosenShip = playerShips[i];
+                    }
+
+
+
+                    // chosenShip = ChooseDirection(chosenShip);
+
+                }
+                return chosenShip;
+            }
+
+            catch (Exception)
+            {
+
+                Program.PleasePickTheRightNumber();
+            }
+        }
+
+
+
+        /// <summary>
         /// Adding either true or false to the direction bool for playerShips. This one is only returning a ship
         /// </summary>
         /// <param name="playerShips"></param>
@@ -136,56 +176,67 @@ namespace BattleShips
 
 
         /// <summary>
-        /// returning the cordinate for the X axis
+        /// returning the cordinate and the Carecter to show for the X axis by using a Tuple to return multiple variables og different kinds
         /// </summary>
         /// <returns></returns>
-        public byte PlaceX()
+        public Tuple<byte, string> PlaceX(byte xCord, string xCordChar)
         {
-            byte xCord = 0;
+            //xCord = 0;
             switch (Convert.ToChar(Console.ReadKey(true).KeyChar.ToString().ToUpper()))//Take both upper and over case letters. 
 
             {
                 case 'A':
                     xCord = 0;
+                    xCordChar = "A";
                     break;
 
                 case 'B':
                     xCord = 1;
+                    xCordChar = "B";
                     break;
 
                 case 'C':
                     xCord = 2;
+                    xCordChar = "C";
                     break;
 
                 case 'D':
                     xCord = 3;
+                    xCordChar = "D";
                     break;
 
                 case 'E':
                     xCord = 4;
+                    xCordChar = "E";
                     break;
 
                 case 'F':
                     xCord = 5;
+                    xCordChar = "F";
                     break;
 
                 case 'G':
                     xCord = 6;
+                    xCordChar = "G";
                     break;
 
                 case 'H':
                     xCord = 7;
+                    xCordChar = "H";
                     break;
 
                 case 'I':
                     xCord = 8;
+                    xCordChar = "I";
                     break;
 
                 case 'J':
                     xCord = 9;
+                    xCordChar = "J";
                     break;
             }
-            return xCord;
+            return new Tuple<byte, string>(xCord, xCordChar);
+
         }
 
 
@@ -195,91 +246,91 @@ namespace BattleShips
         /// returning the cordinate for the Y axis
         /// </summary>
         /// <returns></returns>
-        public byte PlaceY()
+        public byte PlaceY(byte yCord)
         {
-            if (true)
+
+            switch (Console.ReadKey(true).KeyChar)
             {
-                byte yCord = 0;
-                switch (Console.ReadKey(true).KeyChar)
-                {
-                    case '0':
-                        yCord = 0;
-                        break;
+                case '0':
+                    yCord = 0;
+                    break;
 
-                    case '1':
-                        yCord = 1;
-                        break;
+                case '1':
+                    yCord = 1;
+                    break;
 
-                    case '2':
-                        yCord = 2;
-                        break;
+                case '2':
+                    yCord = 2;
+                    break;
 
-                    case '3':
-                        yCord = 3;
-                        break;
+                case '3':
+                    yCord = 3;
+                    break;
 
-                    case '4':
-                        yCord = 4;
-                        break;
+                case '4':
+                    yCord = 4;
+                    break;
 
-                    case '5':
-                        yCord = 5;
-                        break;
+                case '5':
+                    yCord = 5;
+                    break;
 
-                    case '6':
-                        yCord = 6;
-                        break;
+                case '6':
+                    yCord = 6;
+                    break;
 
-                    case '7':
-                        yCord = 7;
-                        break;
+                case '7':
+                    yCord = 7;
+                    break;
 
-                    case '8':
-                        yCord = 8;
-                        break;
+                case '8':
+                    yCord = 8;
+                    break;
 
-                    case '9':
-                        yCord = 9;
-                        break;
-                }
-                return yCord;
+                case '9':
+                    yCord = 9;
+                    break;
             }
+            return yCord;
+
         }
 
 
 
 
-        public void PlacePlayerShip(GameArea playerArea, Ship playerShip)
+        public void PlacePlayerShip(GameArea playerArea, Ship choosenPlayerShip, List<Ship> ships, List<Ship> playerShips, byte xCord, byte yCord)
         {
             try
             {
-                if (playerArea.GameAreaArray[PlaceX(), PlaceY()] == 0)//0=empty, 1=ship, 2=ship hit, 3=not shot at, 4=already shot at
+                if (playerArea.GameAreaArray[xCord, yCord] == 0)//0=empty, 1=ship, 2=ship hit, 3=not shot at, 4=already shot at
                 {
-                    if (playerShip.Direction == true)
+                    if (choosenPlayerShip.Direction == true)
                     {
-                        if (playerArea.GameAreaArray.GetLength(1) - (playerArea.GameAreaArray.GetLength(1) - playerShip.Length) >= playerShip.Length)
+                        if (playerArea.GameAreaArray.GetLength(1) - (playerArea.GameAreaArray.GetLength(1) - choosenPlayerShip.Length) >= choosenPlayerShip.Length)
                         {
                             byte count = 0;
-                            for (int i = 0; i < playerShip.Length; i++)
+                            for (int i = 0; i < choosenPlayerShip.Length; i++)
                             {
-                                if (playerArea.GameAreaArray[PlaceX(), PlaceY() + i] == 0)//0=empty, 1=ship, 2=ship hit, 3=not shot at, 4=already shot at
+                                if (playerArea.GameAreaArray[xCord, yCord + i] == 0)//0=empty, 1=ship, 2=ship hit, 3=not shot at, 4=already shot at
                                 {
                                     count = count++;
                                 }
                             }
-                            if (count < playerShip.Length)
+                            if (count < choosenPlayerShip.Length)
                             {
                                 //Here the ship can be placed.
-                                for (int i = 0; i < playerShip.Length; i++)
+                                for (int i = 0; i < choosenPlayerShip.Length; i++)
                                 {
-                                    playerArea.GameAreaArray[PlaceX(), PlaceY() + i] = 1;
+                                    playerArea.GameAreaArray[xCord, yCord + i] = 1;
                                 }
+                                playerShips.Add(choosenPlayerShip);
+                                ships.Remove(choosenPlayerShip);
                             }
                         }
                     }
                     else
                     {
-                        if (playerArea.GameAreaArray.GetLength(0) - (playerArea.GameAreaArray.GetLength(0) - playerShip.Length) >= playerShip.Length)
+                        if (playerArea.GameAreaArray.GetLength(0) - (playerArea.GameAreaArray.GetLength(0) - choosenPlayerShip.Length) >= choosenPlayerShip.Length)
                         {
 
                         }

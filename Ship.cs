@@ -10,6 +10,7 @@ namespace BattleShips
 
         private string name;
         private byte length;
+        private byte hit;
        private bool direction; //true = horisontal - false = vertical
         #endregion
 
@@ -26,6 +27,12 @@ namespace BattleShips
         {
             get { return length; }
             set { length = value; }
+        }
+
+        public byte Hit
+        {
+            get { return hit; }
+            set { hit = value; }
         }
         public bool Direction
         {
@@ -44,10 +51,11 @@ namespace BattleShips
         }
 
 
-        public Ship(string name, byte length,bool direction)
+        public Ship(string name, byte length, byte hit,bool direction)
         {
             this.name = name;
             this.length = length;
+            this.hit = hit;
            this.direction = direction;
 
         }

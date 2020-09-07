@@ -6,37 +6,41 @@ namespace BattleShips
 {
     class Program
     {
-           static GameController gameController = new GameController();
+        static private byte xCord = 0;
+        static private string xCordChar = null;
+        static private byte yCord = 0;
+        static GameController gameController = new GameController();
         static void Main(string[] args)
         {
-           
+
 
 
             //Creating gameareas
             GameArea playerArea = gameController.CreateGameArea(10, 10, 0);
             GameArea computerArea = gameController.CreateGameArea(10, 10, 0);
             string[] rowLetters = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+            string[] colLetters = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
             List<Ship> ships = new List<Ship>();
-            ships.Add(new Ship("Carrier", 5, true));
-            ships.Add(new Ship("Battleship", 4, true));
-            ships.Add(new Ship("Cruiser", 3, true));
-            ships.Add(new Ship("Submarine", 3, true));
-            ships.Add(new Ship("Destroyer", 2, true));
+            ships.Add(new Ship("Carrier", 5, 0, true));
+            ships.Add(new Ship("Battleship", 4, 0, true));
+            ships.Add(new Ship("Cruiser", 3, 0, true));
+            ships.Add(new Ship("Submarine", 3, 0, true));
+            ships.Add(new Ship("Destroyer", 2, 0, true));
 
             List<Ship> playerShips = new List<Ship>();
-            playerShips.Add(new Ship("Carrier", 5, true));
-            playerShips.Add(new Ship("Battleship", 4, true));
-            playerShips.Add(new Ship("Cruiser", 3, true));
-            playerShips.Add(new Ship("Submarine", 3, true));
-            playerShips.Add(new Ship("Destroyer", 2, true));
+            playerShips.Add(new Ship("Carrier", 5, 0, true));
+            playerShips.Add(new Ship("Battleship", 4, 0, true));
+            playerShips.Add(new Ship("Cruiser", 3, 0, true));
+            playerShips.Add(new Ship("Submarine", 3, 0, true));
+            playerShips.Add(new Ship("Destroyer", 2, 0, true));
 
             List<Ship> computerShips = new List<Ship>();
-            computerShips.Add(new Ship("Carrier", 5, true));
-            computerShips.Add(new Ship("Battleship", 4, true));
-            computerShips.Add(new Ship("Cruiser", 3, true));
-            computerShips.Add(new Ship("Submarine", 3, true));
-            computerShips.Add(new Ship("Destroyer", 2, true));
+            computerShips.Add(new Ship("Carrier", 5, 0, true));
+            computerShips.Add(new Ship("Battleship", 4, 0, true));
+            computerShips.Add(new Ship("Cruiser", 3, 0, true));
+            computerShips.Add(new Ship("Submarine", 3, 0, true));
+            computerShips.Add(new Ship("Destroyer", 2, 0, true));
 
 
 
@@ -49,22 +53,24 @@ namespace BattleShips
 
 
             ShowBanner(); //Creating a bautifull banner from an ASCii file.
-            
+
             //Sending the arguments to the methods by including those in the brackets. They can only be read this way
-            gameController.FillGameArea(computerArea, playerArea);
+            //gameController.FillGameArea(computerArea, playerArea);
             ShowGameArea(computerArea, playerArea, rowLetters);
             ShowChooseShip(playerShips);
-            Ship choosenShip = gameController.ChoosePlayerShip(playerShips);
+            Ship choosenShip = gameController.ChoosePlayerShip(ships, playerShips);
             ChooseDirection(choosenShip);
             //ShowPlaceYourShip();
 
             ShowPlaceXCordinate();
-            gameController.PlaceX();
+            var xTuple = gameController.PlaceX(xCord, xCordChar); //I am so sorry for using var. But as it returs two different variables, then var is the only choice i know
+            Console.Write($"{xTuple.Item1}\t");
             ShowPlaceYCordinate();
-            gameController.PlaceY();
+            //gameController.PlaceY();
+            Console.Write($"{gameController.PlaceY(yCord)}\n\n");
 
-            gameController.PlacePlayerShip(playerArea, choosenShip);
-            
+            gameController.PlacePlayerShip(playerArea, choosenShip, xCord, yCord);
+
 
         }
 
@@ -112,9 +118,9 @@ namespace BattleShips
             Console.WriteLine($"Horisontal: Press 1: Vertical: Press 2");
             Ship theShip = gameController.ChoosePlayershipDirection(playerShip);
 
-            if (theShip.Direction==true)
+            if (theShip.Direction == true)
             {
-            Console.WriteLine($"You choose Horisontal");
+                Console.WriteLine($"You choose Horisontal");
             }
             else
             {
@@ -137,15 +143,15 @@ namespace BattleShips
 
         public static void ShowPlaceXCordinate()
         {
-            Console.WriteLine("Choose the X cordinate");
+            Console.Write("Choose the X cordinate:\t");
         }
 
 
 
 
-         public static void ShowPlaceYCordinate()
+        public static void ShowPlaceYCordinate()
         {
-            Console.WriteLine("Choose the Y cordinate");
+            Console.Write("Choose the Y cordinate:\t");
         }
 
 
@@ -190,9 +196,18 @@ namespace BattleShips
 
 
 
-        
+
 
 
         }
+
+
+
+        #region Error messages
+        public static void PleasePickTheRightNumber()
+        {
+            Console.WriteLine("ERROR! You need to pick a number within the available range.");
+        }
+        #endregion
     }
 }
